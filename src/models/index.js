@@ -34,7 +34,7 @@ const Usuario = sequelize.define('usuario', {
        unique: true
    },
    senha: {
-       type: Sequelize.BLOB(200),
+       type: Sequelize.BLOB,
        allowNull: false
    },
    nascimento: {

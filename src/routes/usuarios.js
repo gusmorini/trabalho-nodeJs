@@ -19,4 +19,10 @@ const controller = require('../controllers/usuarios');
  * );
  *******/
 
+router.post('/', controller.cadastro)
+router.post('/login', controller.login)
+router.get('/:usuarioId', controller.buscaPorId)
+router.get('/', controller.usuario)
+router.put('/:usuarioId', controller.edicao)
+
 module.exports = router;

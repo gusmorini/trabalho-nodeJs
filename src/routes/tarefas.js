@@ -21,4 +21,8 @@ const controller = require('../controllers/tarefas');
  * );
  *******/
 
+router.get('/', (request, response) => {
+    response.status(200).send('tarefas');
+ });
+
 module.exports = router;

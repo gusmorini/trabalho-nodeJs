@@ -8,7 +8,9 @@ function autenticarToken (request, response, next){
     try {
         const payload = jwt.verify(token, SECRET_KEY);
         console.log('Token válido', payload);
-        response.status(200).send(payload);
+        request.usuarioLogado = payload;
+        next();
+        //response.status(200).send('Acesso permitido');
     }
     catch (exception) {
         console.error('Token inválido', exception);

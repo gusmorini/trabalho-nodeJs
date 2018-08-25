@@ -1,5 +1,5 @@
 const { Usuario } = require ('../models');
-const {gerarToken, autenticarToken} = require('../utils/token');
+const {gerarToken} = require('../utils/token');
 
 
 function cadastro(request, response, next) {
@@ -87,16 +87,14 @@ function login(request, response, next) {
         console.error(ex)
         response.status(412).send('não foi possivel consultar o banco de dados')
     })
-
-
 }
 
 function usuario(request, response, next){
-
-    autenticarToken(request, response, next);
+    response.json(request.usuarioLogado);
 }
 
 function logout (request, response, next){
+    request.usuarioLogado = null;
     response.status(200).cookie('token',null).send('usuário deslogado')
 }
 

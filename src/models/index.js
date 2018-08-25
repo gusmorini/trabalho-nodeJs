@@ -69,7 +69,8 @@ const Tarefa = sequelize.define('tarefa', {
  *******/
 
 Usuario.hasMany(Tarefa, {
-    
+  onDelete: 'NO ACTION',
+  onUpdate: 'NO ACTION'
 })
 
 module.exports = {

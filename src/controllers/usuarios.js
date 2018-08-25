@@ -1,9 +1,5 @@
 const { Usuario } = require ('../models');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = "&uaQ76gR#SQPthHV82#Dt=HnUwzbM8KnP&T#uTvG*NsQZMspRt";
-//const bcrypt = require('bcryptjs');
-
-//let token = null;
+const {gerarToken, autenticarToken} = require('../utils/token');
 
 
 function cadastro(request, response, next) {
@@ -77,14 +73,14 @@ function login(request, response, next) {
     })
     .then(usuario=>{
         if(usuario !== null){
-            const { id, nome, email, cof, nascimento } = usuario
-            const payload = {
-                id, nome, email, cof, nascimento
-            }
-            const token = jwt.sign(payload, SECRET_KEY)
+
+            const token = gerarToken(usuario);
             response.status(200).cookie('token',token).send('usuário logado')
+
         }else{
+
             response.status(401).send('E-mail ou senha inválidos')
+
         }
     })
     .catch(ex=>{
@@ -97,17 +93,7 @@ function login(request, response, next) {
 
 function usuario(request, response, next){
 
-    const { cookies: {token} } = request;
-
-    try {
-        const payload = jwt.verify(token, SECRET_KEY);
-        console.log('Token válido', payload);
-        response.status(200).send(payload);
-      } catch (exception) {
-        console.error('Token inválido', exception);
-        response.status(403).send('Acesso negado');
-      }
-
+    autenticarToken(request, response, next);
 }
 
 function logout (request, response, next){

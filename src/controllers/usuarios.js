@@ -97,18 +97,21 @@ function login(request, response, next) {
 
 function usuario(request, response, next){
 
-    // try {
-    //     const payload = jwt.verify(token, SECRET_KEY);
-    //     console.log('Token válido', payload);
-    //     response.status(200).send(payload);
-    //   } catch (exception) {
-    //     console.error('Token inválido', exception);
-    //     response.status(403).send('Acesso negado');
-    //   }
+    const { cookies: {token} } = request;
 
-    const {cookie:{token}} = request;
-    response.send(token)
+    try {
+        const payload = jwt.verify(token, SECRET_KEY);
+        console.log('Token válido', payload);
+        response.status(200).send(payload);
+      } catch (exception) {
+        console.error('Token inválido', exception);
+        response.status(403).send('Acesso negado');
+      }
 
+}
+
+function logout (request, response, next){
+    response.status(200).cookie('token',null).send('usuário deslogado')
 }
 
 module.exports = {
@@ -117,4 +120,5 @@ module.exports = {
     usuario,
     edicao,
     login,
+    logout
 };

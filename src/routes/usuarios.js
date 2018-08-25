@@ -21,6 +21,7 @@ const controller = require('../controllers/usuarios');
 
 router.post('/', controller.cadastro)
 router.post('/login', controller.login)
+router.get('/logout', controller.logout)
 router.get('/:usuarioId', controller.buscaPorId)
 router.get('/', controller.usuario)
 router.put('/:usuarioId', controller.edicao)

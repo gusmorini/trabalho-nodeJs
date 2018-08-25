@@ -11,7 +11,7 @@ function cadastro(request, response, next) {
         titulo, descricao, usuarioId:id
     })
     .then( tarefa => {
-        response.status(201).send('tarefa adicionada')
+        response.status(201).json(tarefa)
     })
     .catch( ex => {
         console.error(ex);
@@ -22,8 +22,12 @@ function cadastro(request, response, next) {
 
 function listagem(request, response, next) {
 
+	const { usuarioLogado: { id }} = request
+
 	Tarefa.findAll({
-	where: {}
+	where: {
+		usuarioId: id
+	}
 	}).then(tarefa => {
 		if(!tarefa){
 			response.status(404).send('nenhuma tarefa encontrada')

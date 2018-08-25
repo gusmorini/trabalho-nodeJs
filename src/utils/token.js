@@ -14,7 +14,7 @@ function autenticarToken (request, response, next){
     }
     catch (exception) {
         console.error('Token inválido', exception);
-        response.status(403).send('Acesso negado');
+        response.status(403).send('Acesso negado, faça login e tente novamente...');
     }
 
 }

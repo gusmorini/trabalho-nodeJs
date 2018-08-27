@@ -1,14 +1,16 @@
 const { Usuario } = require ('../models');
 const {gerarToken} = require('../utils/token');
+const bcrypt = require('bcryptjs');
 
 
 function cadastro(request, response, next) {
 
-    const { body } = request;
-    const { nome, email, cpf, nascimento, senha} = body
+    const { body:{ nome, email, cpf, nascimento, senha } } = request
+
+    const senhaCrypt = bcrypt.hashSync(senha,bcrypt.genSaltSync(10));
 
     Usuario.create({
-        nome, email, cpf, nascimento, senha
+        nome, email, cpf, nascimento, senha:senhaCrypt
     })
     .then( usuario => {
         response.status(201).json(usuario)
@@ -20,7 +22,7 @@ function cadastro(request, response, next) {
 }
 
 function buscaPorId(request, response, next) {
-    
+   
     const { params:{usuarioId} } = request
 
     Usuario.findById(usuarioId)
@@ -67,20 +69,18 @@ function login(request, response, next) {
 
     Usuario.findOne({
         where:{
-            email,
-            senha
+            email
         }
     })
-    .then(usuario=>{
-        if(usuario !== null){
-
+    .then(usuario => {
+        if( (usuario !== null) || bcrypt.compareSync(senha, usuario.senha))
+        {
             const token = gerarToken(usuario);
-            response.status(200).cookie('token',token).send('usuário logado')
-
-        }else{
-
-            response.status(401).send('E-mail ou senha inválidos')
-
+            response.status(200).cookie('token',token).send('usuário logado');
+        }
+        else
+        {
+            response.status(401).send('E-mail ou senha inválidos');
         }
     })
     .catch(ex=>{

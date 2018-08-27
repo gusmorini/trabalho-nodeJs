@@ -1,5 +1,6 @@
 
 const { Tarefa } = require('../models');
+const Sequelize = require('sequelize');
 
 function cadastro(request, response, next) {
 
@@ -22,13 +23,20 @@ function cadastro(request, response, next) {
 
 function listagem(request, response, next) {
 
-	const { usuarioLogado: { id }} = request
+	const { usuarioLogado: { id }, query:{titulo}  } = request;
 
-	Tarefa.findAll({
-	where: {
-		usuarioId: id
-	}
-	}).then(tarefa => {
+    const tarefaQuery = {
+        where:{ usuarioId: id }
+    }
+
+    if (titulo){
+        tarefaQuery.where.titulo = {
+            [Sequelize.Op.like]: `%${titulo}%`
+        },
+        tarefaQuery.where.usuarioId = id
+    }
+
+	Tarefa.findAll(tarefaQuery).then(tarefa => {
 		if(!tarefa){
 			response.status(404).send('nenhuma tarefa encontrada')
 		}else{

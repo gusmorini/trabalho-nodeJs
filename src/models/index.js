@@ -38,7 +38,7 @@ const Usuario = sequelize.define('usuario', {
        allowNull: false
    },
    nascimento: {
-       type: Sequelize.DATE()
+       type: Sequelize.DATEONLY()
    }
 });
 
@@ -56,10 +56,15 @@ const Tarefa = sequelize.define('tarefa', {
         type: Sequelize.TEXT
     },
     concluida:{
-        type: Sequelize.TINYINT
+        type: Sequelize.TINYINT,
+        defaultValue: 0
     },
     usuarioId: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
+        references: {
+          model: 'usuario',
+          key: 'id'
+        }
     }
 })
 
